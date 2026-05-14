@@ -103,12 +103,24 @@ export default function ProjectCard({ project, onOpen }: Props) {
 
         {/* Actions */}
         <div className="flex gap-2 pt-3 border-t border-white/10">
-          <button
-            onClick={(e) => { e.stopPropagation(); onOpen(project); }}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-white text-black text-sm font-semibold hover:bg-slate-100 transition-colors"
-          >
-            <ExternalLink className="w-3.5 h-3.5" /> Preview
-          </button>
+          {project.link ? (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-white text-black text-sm font-semibold hover:bg-slate-100 transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" /> Preview
+            </a>
+          ) : (
+            <button
+              onClick={(e) => { e.stopPropagation(); onOpen(project); }}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-white text-black text-sm font-semibold hover:bg-slate-100 transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" /> Preview
+            </button>
+          )}
           {project.github && (
             <a
               href={project.github}

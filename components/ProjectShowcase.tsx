@@ -55,6 +55,7 @@ const PROJECTS: Project[] = [
     year: '2024',
     team: 'Solo',
     status: 'Live',
+    link: 'https://dashboard-beige-one-82.vercel.app',
     github: 'https://github.com',
   },
   {
@@ -97,7 +98,7 @@ const PROJECTS: Project[] = [
     year: '2025',
     team: 'Solo',
     status: 'Live',
-    link: 'https://your-ecommerce.vercel.app',
+    link: 'https://ecom-omega-black.vercel.app',
     github: 'https://github.com',
   },
   {

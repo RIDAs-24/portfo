@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, ExternalLink, GitBranch, CheckCircle2 } from 'lucide-react';
 import type { Project } from './data';
@@ -11,6 +12,12 @@ interface Props {
 }
 
 export default function LivePreviewModal({ project, onClose }: Props) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Close on Escape key
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -24,32 +31,34 @@ export default function LivePreviewModal({ project, onClose }: Props) {
     return () => { document.body.style.overflow = ''; };
   }, [project]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     // AnimatePresence handles smooth mount/unmount
     <AnimatePresence>
       {project && (
-        <>
+        <motion.div
+          key="modal-overlay"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
           {/* Backdrop */}
-          <motion.div
-            key="backdrop"
-            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-lg"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
+            className="absolute inset-0 bg-black/75 backdrop-blur-lg cursor-pointer"
             onClick={onClose}
           />
 
           {/* Panel */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-            <motion.div
-              key="panel"
-              className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl
-                glass-card border border-white/10 shadow-2xl pointer-events-auto"
-              initial={{ opacity: 0, scale: 0.9, y: 32 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.93, y: 16 }}
-              transition={{ type: 'spring', stiffness: 280, damping: 24 }}
-            >
+          <motion.div
+            className="relative z-10 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl
+              glass-card border border-white/10 shadow-2xl"
+            initial={{ scale: 0.9, y: 32 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.93, y: 16 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+          >
               {/* Banner */}
               <div className={`relative h-36 rounded-t-3xl bg-gradient-to-br ${project.gradient} overflow-hidden`}>
                 <div className="absolute inset-0 bg-grid opacity-30" />
@@ -139,10 +148,10 @@ export default function LivePreviewModal({ project, onClose }: Props) {
                   )}
                 </div>
               </div>
-            </motion.div>
-          </div>
-        </>
+          </motion.div>
+        </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

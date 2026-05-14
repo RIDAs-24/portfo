@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { Layers } from 'lucide-react';
 import { PROJECTS, ALL_TECHS, type Project } from './data';
 import ProjectCard from './ProjectCard';
@@ -9,11 +9,11 @@ import LivePreviewModal from './LivePreviewModal';
 import SkillsChart from './SkillsChart';
 
 // Reusable animation variants
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 32 },
   show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] } },
 };
-const stagger = {
+const stagger: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.08 } },
 };

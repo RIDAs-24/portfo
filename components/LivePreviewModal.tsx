@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { X, ExternalLink, Github, CheckCircle2 } from 'lucide-react';
+import { X, ExternalLink, GitBranch, CheckCircle2 } from 'lucide-react';
 import { useEffect } from 'react';
 import type { Project } from './ProjectShowcase';
 
@@ -149,7 +149,7 @@ export default function LivePreviewModal({ project, onClose }: Props) {
                       rel="noopener noreferrer"
                       className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition-colors"
                     >
-                      <Github className="w-4 h-4" /> Source Code
+                      <GitBranch className="w-4 h-4" /> Source Code
                     </a>
                   )}
                 </div>

@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { ExternalLink, Github, Calendar, Users, Zap } from 'lucide-react';
+import { ExternalLink, GitBranch, Calendar, Users, Zap } from 'lucide-react';
 import type { Project } from './ProjectShowcase';
 
 interface Props {
@@ -131,7 +131,7 @@ export default function ProjectCard({ project, onOpen }: Props) {
               onClick={(e) => e.stopPropagation()}
               className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-sm font-semibold hover:bg-white/10 transition-colors"
             >
-              <Github className="w-4 h-4" />
+              <GitBranch className="w-4 h-4" />
             </a>
           )}
         </div>

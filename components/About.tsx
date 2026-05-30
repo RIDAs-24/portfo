@@ -2,10 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { scrollRevealVariants, containerVariants, itemVariants } from '@/lib/animations';
+import Image from 'next/image';
 
 export default function About() {
   return (
-    <section id="about" className="py-32 px-6 relative overflow-hidden z-10">
+    <section id="about" className="py-32 px-6 relative overflow-hidden z-10 section-optimized">
       <motion.div
         className="max-w-7xl mx-auto relative z-10"
         initial="initial"
@@ -20,19 +21,18 @@ export default function About() {
               Designing with <br/>
               <span className="text-gradient">Purpose & Passion</span>
             </h2>
-            <div className="glass-panel p-8 rounded-3xl relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="aspect-[4/3] rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-                {/* Placeholder for an actual photo or 3D graphic */}
-                <div className="w-full h-full bg-gradient-to-br from-indigo-900/50 to-purple-900/50 flex items-center justify-center">
-                  <motion.div 
-                    className="w-32 h-32 rounded-full border border-white/20 bg-white/5 backdrop-blur-md"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  >
-                    <div className="w-full h-full rounded-full border-t border-indigo-400 opacity-50" />
-                  </motion.div>
-                </div>
+            <div className="glass-panel p-2 rounded-[32px] relative overflow-hidden group shadow-2xl shadow-indigo-500/10">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="relative aspect-[4/3] rounded-[24px] overflow-hidden border border-white/10 bg-slate-900/50">
+                <Image
+                  src="/img.png.jpg"
+                  alt="Full Stack Developer Portrait"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-80 pointer-events-none" />
               </div>
             </div>
           </motion.div>

@@ -6,7 +6,11 @@ import { Layers } from 'lucide-react';
 import { PROJECTS, ALL_TECHS, type Project } from './data';
 import ProjectCard from './ProjectCard';
 import LivePreviewModal from './LivePreviewModal';
-import SkillsChart from './SkillsChart';
+import dynamic from 'next/dynamic';
+
+// ssr: false is correct here — Recharts uses ResizeObserver + getBoundingClientRect
+// which are browser-only APIs that throw during Node.js SSR.
+const SkillsChart = dynamic(() => import('./SkillsChart'), { ssr: false });
 
 // Reusable animation variants
 const fadeUp: Variants = {
@@ -118,8 +122,9 @@ export default function ProjectShowcase() {
             </AnimatePresence>
           </div>
 
-          {/* Right — sticky analytics sidebar (1/3 width) */}
-          <div className="lg:col-span-1 flex flex-col gap-5 lg:sticky lg:top-24">
+          {/* Right — sticky analytics sidebar (1/3 width)
+               min-w-0 prevents flex/grid collapse to negative width during hydration */}
+          <div className="lg:col-span-1 min-w-0 flex flex-col gap-5 lg:sticky lg:top-24">
             <SkillsChart />
 
             {/* Stats card */}

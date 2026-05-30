@@ -7,13 +7,13 @@
     --border: #e2e8f0;
   }
   .dark {
-    --background: #000000;
+    --background: #070B14;
     --foreground: #ffffff;
     --border: #1e293b;
   }
   
   html {
-    @apply scroll-smooth;
+    /* Removed scroll-smooth from html — use JS smooth scrolling only on anchor clicks to avoid janky scroll during fast flings */
     scrollbar-width: thin;
     scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
   }
@@ -21,28 +21,48 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    @apply transition-colors duration-300 antialiased;
+    transition-property: color, background-color;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
   ::-webkit-scrollbar-track {
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.5);
+    background-color: rgba(156, 163, 175, 0.4);
     border-radius: 20px;
   }
 }
 
 @layer utilities {
   .glass-panel {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 dark:bg-black/20 dark:border-white/5;
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
-  
+  .dark .glass-panel {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+
   .glass-card {
-    @apply bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl dark:bg-white/5 dark:border-white/10;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+  }
+  .dark .glass-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
   }
   
   .text-glow {
@@ -50,7 +70,10 @@
   }
   
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400;
+    background: linear-gradient(to right, #3b82f6, #9333ea, #f43f5e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
   
   .bg-grid {
@@ -62,7 +85,86 @@
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   }
+
+  /* ── Performance helpers ──────────────────────────────────────── */
+
+  /* Applied to large below-fold sections for deferred rendering */
+  .section-optimized {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 800px;
+    contain: layout style;
+  }
+
+  /* GPU-promote animated layers */
+  .gpu-layer {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform;
+  }
 }
+
+/* ── CSS-based background orb animations (replaces Framer Motion) ─ */
+/* These run entirely on GPU via compositor — zero JS/RAF overhead   */
+
+@keyframes orb-drift-1 {
+  0%   { transform: translateZ(0) translate(0px, 0px)   scale(1); }
+  33%  { transform: translateZ(0) translate(-40px, 50px) scale(1.12); }
+  66%  { transform: translateZ(0) translate(20px, -20px) scale(0.96); }
+  100% { transform: translateZ(0) translate(0px, 0px)   scale(1); }
+}
+
+@keyframes orb-drift-2 {
+  0%   { transform: translateZ(0) translate(0px, 0px)   scale(1); }
+  33%  { transform: translateZ(0) translate(60px, -40px) scale(1.08); }
+  66%  { transform: translateZ(0) translate(-30px, 20px) scale(0.98); }
+  100% { transform: translateZ(0) translate(0px, 0px)   scale(1); }
+}
+
+@keyframes orb-drift-3 {
+  0%   { transform: translateZ(0) translate(0px, 0px)    scale(1); }
+  33%  { transform: translateZ(0) translate(50px, -30px) scale(1.15); }
+  66%  { transform: translateZ(0) translate(-30px, 40px) scale(0.92); }
+  100% { transform: translateZ(0) translate(0px, 0px)    scale(1); }
+}
+
+@keyframes orb-drift-4 {
+  0%   { transform: translateZ(0) translate(0px, 0px)    scale(1); }
+  33%  { transform: translateZ(0) translate(30px, 30px)  scale(1.10); }
+  66%  { transform: translateZ(0) translate(-20px, -30px) scale(0.98); }
+  100% { transform: translateZ(0) translate(0px, 0px)    scale(1); }
+}
+
+@keyframes orb-drift-5 {
+  0%   { transform: translateZ(0) translate(0px, 0px)    scale(1); }
+  33%  { transform: translateZ(0) translate(-30px, -40px) scale(1.05); }
+  66%  { transform: translateZ(0) translate(20px, 20px)  scale(0.98); }
+  100% { transform: translateZ(0) translate(0px, 0px)    scale(1); }
+}
+
+/* CSS star/dot pulse animations (replaces Header's motion.div stars) */
+@keyframes star-pulse-1 {
+  0%, 100% { opacity: 0.2; transform: translateZ(0) scale(0.8); }
+  50%       { opacity: 1;   transform: translateZ(0) scale(1.5); }
+}
+@keyframes star-pulse-2 {
+  0%, 100% { opacity: 0.3; transform: translateZ(0) scale(0.9); }
+  50%       { opacity: 1;   transform: translateZ(0) scale(1.4); }
+}
+@keyframes star-pulse-3 {
+  0%, 100% { opacity: 0.1; transform: translateZ(0) scale(0.5); }
+  50%       { opacity: 0.9; transform: translateZ(0) scale(1.5); }
+}
+@keyframes star-float {
+  0%, 100% { opacity: 0.1; transform: translateZ(0) translateY(0px); }
+  50%       { opacity: 0.8; transform: translateZ(0) translateY(-5px); }
+}
+
+/* CSS utility classes for the header stars */
+.star-1 { animation: star-pulse-1 2s ease-in-out infinite; }
+.star-2 { animation: star-pulse-2 3s ease-in-out 0.5s infinite; }
+.star-3 { animation: star-pulse-3 1.8s ease-in-out 1s infinite; }
+.star-4 { animation: star-pulse-1 2.5s ease-in-out 0.2s infinite; }
+.star-float { animation: star-float 4s ease-in-out 0.7s infinite; }
 
 /* Modern animations */
 @keyframes fadeIn {
@@ -86,8 +188,8 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+  0%, 100% { transform: translateZ(0) translateY(0px); }
+  50% { transform: translateZ(0) translateY(-8px); }
 }
 
 @keyframes glow {
@@ -101,13 +203,6 @@
   100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
 }
 
-@keyframes blob-animation {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(20px, -50px) scale(1.1); }
-  50% { transform: translate(-20px, 20px) scale(0.9); }
-  75% { transform: translate(50px, 50px) scale(1.05); }
-}
-
 /* Smooth animations */
 .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
 .animate-slide-up { animation: slideInUp 0.8s ease-out forwards; }
@@ -117,7 +212,7 @@
   background: linear-gradient(to right, #fff 0%, #f0f0f0 50%, #fff 100%);
   background-size: 1000px 100%;
 }
-.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-float { animation: float 4s ease-in-out infinite; }
 .animate-glow { animation: glow 2s ease-in-out infinite; }
 .animate-pulse-ring { animation: pulse-ring 2s infinite; }
 
@@ -131,7 +226,7 @@
 
 /* Gradient text utility */
 .gradient-text {
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #f43f5e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -151,7 +246,13 @@
 
 /* Hover effects */
 .hover-lift {
-  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
 }
 
 /* Border gradient */
@@ -162,4 +263,16 @@
   background-image: linear-gradient(var(--background), var(--background)), linear-gradient(135deg, #6366f1, #a855f7);
   background-origin: border-box;
   background-clip: padding-box, border-box;
+}
+
+/* ── Accessibility: respect user motion preference ─────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

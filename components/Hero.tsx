@@ -1,50 +1,57 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { containerVariants, textRevealVariants, glowVariants } from '@/lib/animations';
-import AnimatedBackground from '@/components/AnimatedBackground';
 import { ArrowRight, Download } from 'lucide-react';
 
-export default function Hero() {
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: 'smooth' });
-  };
+const scrollToSection = (id: string) => {
+  if (id === 'home') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  const element = document.getElementById(id);
+  element?.scrollIntoView({ behavior: 'smooth' });
+};
 
+export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen pt-32 pb-20 px-6 flex items-center justify-center overflow-hidden">
-      {/* Animated Background */}
-      <AnimatedBackground />
-
       <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-12 items-start relative z-10">
         
-        {/* Left Column - Image & Name */}
+        {/* Left Column — Image & Name */}
+        {/* Removed filter:blur from initial/animate — blur on large elements forces full repaint.
+            Now uses opacity+scale only which the compositor handles without touching layout. */}
         <motion.div
           className="lg:col-span-5 relative flex flex-col justify-start items-center w-full mt-12 lg:mt-0 order-first pl-16 sm:pl-24 lg:pl-32"
-          initial={{ opacity: 0, scale: 0.8, filter: 'blur(20px)' }}
-          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
         >
           <div className="relative w-full max-w-[250px] sm:max-w-[300px] lg:max-w-[350px] aspect-square rounded-full overflow-hidden border border-orange-500/20 shadow-[0_0_40px_rgba(249,115,22,0.2)] group">
             {/* Cyberpunk Sunset Image Filter Overlay */}
             <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/40 via-red-500/20 to-purple-500/40 mix-blend-color z-10 pointer-events-none transition-opacity duration-500 group-hover:opacity-70" />
             
-            <img 
-              src="/bg.jpg" 
-              alt="Rida Sbai" 
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 contrast-[1.1] saturate-[1.2] sepia-[.2] hue-rotate-[-10deg]"
+            {/* next/image replaces raw <img> — auto lazy-load, AVIF/WebP, proper size hints */}
+            <Image
+              src="/bg.jpg"
+              alt="Rida Sbai"
+              fill
+              priority
+              sizes="(max-width: 640px) 250px, (max-width: 1024px) 300px, 350px"
+              className="object-cover transition-transform duration-700 group-hover:scale-105 contrast-[1.1] saturate-[1.2] sepia-[.2] hue-rotate-[-10deg]"
             />
             
             {/* Glass effect overlay bottom */}
             <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-[#030014] via-[#030014]/50 to-transparent z-10 pointer-events-none" />
           </div>
 
-          <h2 className="mt-8 text-3xl sm:text-4xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-purple-500 text-center uppercase">
+          <h2 className="mt-8 text-3xl sm:text-4xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-rose-500 to-purple-600 text-center uppercase">
             Rida Sbai
           </h2>
         </motion.div>
 
-        {/* Right Column - Text Content */}
+        {/* Right Column — Text Content */}
         <motion.div
           className="lg:col-span-7 text-left space-y-8"
           variants={containerVariants}
@@ -60,17 +67,17 @@ export default function Hero() {
                 initial="initial"
                 animate="animate"
               />
-              <span className="text-sm font-semibold text-orange-50 tracking-wide uppercase">AI & Full Stack Engineer</span>
+              <span className="text-sm font-semibold text-orange-50 tracking-wide uppercase">AI &amp; Full Stack Engineer</span>
             </div>
           </motion.div>
 
-          {/* Main Title / Subtitle */}
+          {/* Main Title */}
           <div className="overflow-hidden">
             <motion.h1 
               className="text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-black tracking-tighter leading-tight lg:leading-none"
               variants={textRevealVariants}
             >
-              <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-pink-500 to-orange-500 pb-4">
+              <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-fuchsia-500 to-orange-500 pb-4">
                 Full Stack Developer
               </span>
             </motion.h1>
@@ -92,7 +99,6 @@ export default function Hero() {
             variants={textRevealVariants} 
             className="flex flex-col sm:flex-row gap-6 justify-start pt-6"
           >
-            {/* Primary Button */}
             <motion.button
               onClick={() => scrollToSection('projects')}
               className="group relative px-8 py-4 bg-white text-black rounded-full font-bold text-lg overflow-hidden transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)] w-full sm:w-auto text-center"
@@ -105,7 +111,6 @@ export default function Hero() {
               </span>
             </motion.button>
             
-            {/* Secondary Button */}
             <motion.a
               href="/cv.pdf"
               target="_blank"
@@ -150,9 +155,6 @@ export default function Hero() {
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Bottom Gradient overlay */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#030014] to-transparent z-10 pointer-events-none" />
     </section>
   );
 }

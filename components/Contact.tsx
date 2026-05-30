@@ -21,7 +21,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-32 px-6 relative z-10 overflow-hidden">
+    <section id="contact" className="py-32 px-6 relative z-10 overflow-hidden section-optimized">
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-full max-h-[600px] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none" />
 

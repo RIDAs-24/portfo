@@ -3,6 +3,7 @@ import {
   ShoppingCart,
   LayoutDashboard,
   Sparkles,
+  Film,
   LucideIcon,
 } from 'lucide-react';
 
@@ -86,6 +87,28 @@ export const PROJECTS: Project[] = [
     category: 'Frontend',
     year: '2026',
     status: 'In Progress',
+    github: 'https://github.com',
+  },
+  {
+    id: 5,
+    title: 'Movie Discovery App',
+    description:
+      'A cinematic movie discovery platform powered by TMDB API with rich analytics and a premium dark UI.',
+    longDescription:
+      'A full-featured movie discovery application built with Next.js and the TMDB API. Features include detailed movie pages with trailers, box office analytics, genre market share charts, ratings, and smooth Framer Motion transitions throughout a premium dark glassmorphism interface.',
+    highlights: [
+      'TMDB API integration for live movie data',
+      'Box Office & Genre analytics with Recharts',
+      'Movie trailers via YouTube embed',
+      'Smooth Framer Motion page transitions',
+    ],
+    tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Recharts', 'TMDB API'],
+    gradient: 'from-rose-500/30 to-orange-500/30',
+    icon: Film,
+    category: 'Full-Stack',
+    year: '2026',
+    status: 'Live',
+    link: 'https://movie-discovery-app-lake.vercel.app',
     github: 'https://github.com',
   },
 ];

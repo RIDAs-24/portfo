@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useLayoutEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import {
   RadarChart,
   Radar,
@@ -13,8 +15,6 @@ import {
   YAxis,
   CartesianGrid,
 } from 'recharts';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
 
 const radarData = [
   { subject: 'React', value: 95 },
@@ -37,7 +37,6 @@ const activityData = [
 
 type ChartType = 'radar' | 'bar';
 
-// Custom tooltip for recharts
 const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ value: number; payload: { subject?: string; day?: string } }> }) => {
   if (active && payload?.length) {
     const label = payload[0].payload.subject || payload[0].payload.day;
@@ -54,22 +53,46 @@ const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<
 export default function SkillsChart() {
   const [chart, setChart] = useState<ChartType>('radar');
 
+  // ResizeObserver-based mount guard: waits for the container to have real
+  // positive dimensions before rendering Recharts. This prevents the
+  // "width(-1) and height(-1) should be greater than 0" error that occurs
+  // when charts render during SSR, hydration, or before flex/grid settles.
+  const [isMounted, setIsMounted] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    // useLayoutEffect fires after DOM mutations but before the browser paints.
+    // requestAnimationFrame defers one more frame so layout is fully resolved,
+    // guaranteeing the container has real positive pixel dimensions before
+    // ResponsiveContainer mounts and attempts to measure them.
+    let raf: number;
+    const el = containerRef.current;
+    if (!el) return;
+
+    raf = requestAnimationFrame(() => {
+      if (el.offsetWidth > 0 && el.offsetHeight > 0) {
+        setIsMounted(true);
+      }
+    });
+
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <motion.div
-      className="glass-card rounded-2xl p-6 border border-white/10 h-full flex flex-col gap-4"
+      className="glass-card rounded-2xl p-6 border border-white/10 flex flex-col gap-4"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-shrink-0">
         <div>
           <h3 className="text-lg font-bold text-white">Analytics</h3>
           <p className="text-xs text-slate-400">
             {chart === 'radar' ? 'Skill proficiency' : 'Weekly coding activity'}
           </p>
         </div>
-        {/* Tab toggle — React useState */}
         <div className="flex gap-1 p-1 rounded-xl bg-white/5 border border-white/10">
           {(['radar', 'bar'] as ChartType[]).map((t) => (
             <button
@@ -87,45 +110,51 @@ export default function SkillsChart() {
         </div>
       </div>
 
-      <div className="flex-1 min-h-[260px]">
-        {chart === 'radar' ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <RadarChart data={radarData}>
-              <PolarGrid stroke="rgba(255,255,255,0.1)" />
-              <PolarAngleAxis
-                dataKey="subject"
-                tick={{ fill: '#94a3b8', fontSize: 12 }}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Radar
-                name="Skills"
-                dataKey="value"
-                stroke="#818cf8"
-                fill="#818cf8"
-                fillOpacity={0.25}
-                strokeWidth={2}
-              />
-            </RadarChart>
-          </ResponsiveContainer>
-        ) : (
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={activityData} barSize={28}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-              <XAxis dataKey="day" tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} axisLine={false} tickLine={false} unit="h" />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
-              <Bar
-                dataKey="hours"
-                radius={[6, 6, 0, 0]}
-                fill="url(#barGrad)"
-              />
-              <defs>
-                <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#818cf8" />
-                  <stop offset="100%" stopColor="#a855f7" />
-                </linearGradient>
-              </defs>
-            </BarChart>
+      {/* Fixed pixel height prevents ResponsiveContainer from measuring 0 or -1.
+          Never use flex-1 or h-full when the parent chain has no fixed height. */}
+      <div
+        ref={containerRef}
+        className="w-full min-w-0"
+        style={{ height: '260px' }}
+      >
+        {isMounted && (
+          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+            {chart === 'radar' ? (
+              <RadarChart data={radarData}>
+                <PolarGrid stroke="rgba(255,255,255,0.1)" />
+                <PolarAngleAxis
+                  dataKey="subject"
+                  tick={{ fill: '#94a3b8', fontSize: 12 }}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Radar
+                  name="Skills"
+                  dataKey="value"
+                  stroke="#818cf8"
+                  fill="#818cf8"
+                  fillOpacity={0.25}
+                  strokeWidth={2}
+                />
+              </RadarChart>
+            ) : (
+              <BarChart data={activityData} barSize={28}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                <XAxis dataKey="day" tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} axisLine={false} tickLine={false} unit="h" />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+                <Bar
+                  dataKey="hours"
+                  radius={[6, 6, 0, 0]}
+                  fill="url(#barGradRoot)"
+                />
+                <defs>
+                  <linearGradient id="barGradRoot" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#818cf8" />
+                    <stop offset="100%" stopColor="#a855f7" />
+                  </linearGradient>
+                </defs>
+              </BarChart>
+            )}
           </ResponsiveContainer>
         )}
       </div>

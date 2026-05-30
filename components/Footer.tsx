@@ -4,16 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-r from-slate-900 to-slate-950 dark:from-black dark:to-slate-950 text-slate-300 dark:text-slate-400 py-12 border-t border-slate-800 relative overflow-hidden">
-      {/* Decorative gradient */}
-      <motion.div
-        className="absolute inset-0 opacity-10"
-        style={{
-          background: 'radial-gradient(circle at 50% 50%, #6366f1, transparent)',
-        }}
-        animate={{ scale: [1, 1.1, 1] }}
-        transition={{ duration: 4, repeat: Infinity }}
-      />
+    <footer className="text-slate-300 dark:text-slate-400 py-12 relative overflow-hidden z-10">
 
       <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
         <motion.p

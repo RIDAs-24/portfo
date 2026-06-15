@@ -204,7 +204,7 @@ export default function ProjectShowcase() {
             Selected{' '}
             <span className="text-gradient">Works</span>
           </h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+          <p className="text-lg text-white max-w-2xl mx-auto">
             Each project is a live example of advanced React patterns — click any card to open the live preview.
           </p>
         </motion.div>

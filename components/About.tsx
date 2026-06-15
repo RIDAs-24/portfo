@@ -38,7 +38,7 @@ export default function About() {
           </motion.div>
 
           {/* Right Side: Bio text in glass cards */}
-          <motion.div className="space-y-6 text-lg text-slate-400 leading-relaxed" variants={containerVariants}>
+          <motion.div className="space-y-6 text-lg text-white leading-relaxed" variants={containerVariants}>
             <motion.div variants={itemVariants} className="glass-card rounded-2xl p-8 hover:-translate-y-1 transition-transform duration-300">
               <p>
                 I am a Full Stack Developer focused on building high-performance web applications with modern technologies like React, Next.js, Node.js, and TypeScript.

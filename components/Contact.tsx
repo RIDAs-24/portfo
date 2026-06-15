@@ -36,7 +36,7 @@ export default function Contact() {
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
             Let&apos;s <span className="text-gradient">Connect</span>
           </h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+          <p className="text-lg text-white max-w-2xl mx-auto">
             Ready to bring your next idea to life? Feel free to reach out for collaborations or just a friendly hello.
           </p>
         </motion.div>

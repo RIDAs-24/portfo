@@ -38,7 +38,7 @@ export default function PremiumBackground() {
         alt="Background"
         fill
         priority
-        quality={80}
+        quality={75}
         className="object-cover object-center"
       />
       {/* Dark overlay to preserve the dark neon aesthetic */}

@@ -33,6 +33,10 @@ const ProjectShowcase = dynamic(() => import('@/components/showcase/ProjectShowc
   loading: () => <SectionSkeleton height="h-[800px]" />,
 });
 
+const EcoSection = dynamic(() => import('@/components/EcoSection'), {
+  loading: () => <SectionSkeleton height="h-[600px]" />,
+});
+
 const Goals = dynamic(() => import('@/components/Goals'), {
   loading: () => <SectionSkeleton height="h-[400px]" />,
 });
@@ -65,6 +69,10 @@ export default function Home() {
 
       <Suspense fallback={<SectionSkeleton height="h-[800px]" />}>
         <ProjectShowcase />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+        <EcoSection />
       </Suspense>
 
       <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>

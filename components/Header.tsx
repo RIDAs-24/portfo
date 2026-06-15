@@ -35,7 +35,7 @@ export default function Header() {
     element?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  const menuItems = ['home', 'about', 'skills', 'projects', 'contact'];
+  const menuItems = ['home', 'about', 'skills', 'projects', 'eco', 'contact'];
 
   return (
     <header className="fixed top-6 left-1/2 -translate-x-1/2 w-full max-w-4xl z-50 px-4 md:px-0">

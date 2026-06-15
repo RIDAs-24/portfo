@@ -117,7 +117,7 @@ export default function Skills() {
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
             Technical <span className="text-gradient">Arsenal</span>
           </h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+          <p className="text-lg text-white max-w-2xl mx-auto">
             A comprehensive toolkit that enables me to build robust, scalable, and visually stunning digital products.
           </p>
         </motion.div>

@@ -79,7 +79,7 @@ export default function ProjectCard({ project, onOpen }: Props) {
           <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gradient transition-all duration-300">
             {project.title}
           </h3>
-          <p className="text-sm text-slate-400 leading-relaxed line-clamp-3">
+          <p className="text-sm text-white leading-relaxed line-clamp-3">
             {project.description}
           </p>
         </div>

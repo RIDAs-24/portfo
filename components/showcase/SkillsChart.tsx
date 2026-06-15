@@ -102,10 +102,9 @@ export default function SkillsChart() {
       <div
         ref={containerRef}
         className="w-full min-w-0"
-        style={{ height: '208px' }}
       >
         {isMounted && (
-          <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+          <ResponsiveContainer width="100%" height={208}>
             {tab === 'radar' ? (
               <RadarChart data={RADAR_DATA}>
                 <PolarGrid stroke="rgba(255,255,255,0.08)" />

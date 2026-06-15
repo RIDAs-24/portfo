@@ -5,7 +5,6 @@ import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { Layers } from 'lucide-react';
 import { PROJECTS, ALL_TECHS, type Project } from './data';
 import ProjectCard from './ProjectCard';
-import LivePreviewModal from './LivePreviewModal';
 import dynamic from 'next/dynamic';
 
 // ssr: false is correct here — Recharts uses ResizeObserver + getBoundingClientRect
@@ -26,8 +25,6 @@ export default function ProjectShowcase() {
   // ── State ─────────────────────────────────────────────────────────────
   // Active tech filter tag (useState)
   const [activeFilter, setActiveFilter] = useState<string>('All');
-  // Currently open project for the modal (useState)
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
 
   // ── Derived data ──────────────────────────────────────────────────────
   // useMemo: re-filters only when activeFilter changes — avoids redundant work
@@ -38,7 +35,7 @@ export default function ProjectShowcase() {
 
   return (
     <section
-      id="showcase"
+      id="projects"
       aria-label="Project Showcase"
       className="py-28 px-6 relative z-10"
     >
@@ -58,8 +55,8 @@ export default function ProjectShowcase() {
             Selected{' '}
             <span className="text-gradient">Works</span>
           </h2>
-          <p className="text-slate-400 max-w-xl mx-auto text-base leading-relaxed">
-            Click any card to open a live preview. Use the filter to explore
+          <p className="text-white max-w-xl mx-auto text-base leading-relaxed">
+            Click any card to explore the project details. Use the filter to discover
             by technology.
           </p>
         </motion.div>
@@ -115,7 +112,7 @@ export default function ProjectShowcase() {
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}
                 >
                   {filtered.map((p) => (
-                    <ProjectCard key={p.id} project={p} onOpen={setActiveProject} />
+                    <ProjectCard key={p.id} project={p} />
                   ))}
                 </motion.div>
               )}
@@ -156,12 +153,6 @@ export default function ProjectShowcase() {
           </div>
         </div>
       </motion.div>
-
-      {/* ── Modal — controlled by React useState ── */}
-      <LivePreviewModal
-        project={activeProject}
-        onClose={() => setActiveProject(null)}
-      />
     </section>
   );
 }

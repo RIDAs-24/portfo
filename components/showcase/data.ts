@@ -4,11 +4,13 @@ import {
   LayoutDashboard,
   Sparkles,
   Film,
+  Leaf,
   LucideIcon,
 } from 'lucide-react';
 
 export interface Project {
   id: number;
+  slug: string;
   title: string;
   description: string;
   longDescription: string;
@@ -26,6 +28,7 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     id: 2,
+    slug: 'e-commerce-platform',
     title: 'E-Commerce Platform',
     description:
       'A highly polished, premium e-commerce application with a modern glassmorphism aesthetic.',
@@ -48,6 +51,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 3,
+    slug: 'saas-admin-dashboard',
     title: 'SaaS Admin Dashboard',
     description:
       'Enterprise-level standalone SaaS Admin Dashboard with data-rich interfaces.',
@@ -70,27 +74,30 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 4,
-    title: 'AI Prompt Studio',
+    slug: 'eco-platform',
+    title: 'Eco Platform',
     description:
-      'Placeholder for a future project focused on AI prompt engineering and generative content.',
+      'A modern SaaS platform for sustainability tracking and eco-friendly insights.',
     longDescription:
-      'An upcoming application designed to streamline the creation, testing, and management of AI prompts for LLMs. Will feature a playground interface, version control for prompts, and integration with popular AI APIs.',
+      'Eco is a production-ready SaaS application designed to help businesses track, analyze, and optimize their environmental impact. Featuring a clean, minimalist UI inspired by Stripe and Vercel, it offers real-time analytics dashboards, sustainability scoring, and actionable insights to drive eco-friendly decisions.',
     highlights: [
-      'Interactive prompt playground',
-      'Integration with OpenAI API',
-      'Prompt versioning and history',
-      'Collaborative workspaces',
+      'Real-time sustainability analytics dashboard',
+      'Carbon footprint tracking and reporting',
+      'Minimalist, performance-first UI',
+      'Interactive data visualization with Recharts',
     ],
-    tech: ['React', 'Next.js', 'Tailwind CSS', 'Framer Motion'],
-    gradient: 'from-fuchsia-500/30 to-rose-500/30',
-    icon: Sparkles,
-    category: 'Frontend',
+    tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+    gradient: 'from-emerald-500/30 to-green-500/30',
+    icon: Leaf,
+    category: 'Full-Stack',
     year: '2026',
-    status: 'In Progress',
+    status: 'Live',
+    link: 'https://eco-blush-ten.vercel.app',
     github: 'https://github.com',
   },
   {
     id: 5,
+    slug: 'movie-discovery-app',
     title: 'Movie Discovery App',
     description:
       'A cinematic movie discovery platform powered by TMDB API with rich analytics and a premium dark UI.',

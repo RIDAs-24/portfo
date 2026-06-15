@@ -24,7 +24,7 @@ export default function PurposePassion() {
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-indigo-400">
             Purpose & Passion
           </h2>
-          <p className="mt-4 text-lg text-slate-400">
+          <p className="mt-4 text-lg text-white">
             Bridging the gap between futuristic design and scalable engineering.
           </p>
         </motion.div>
@@ -74,7 +74,7 @@ export default function PurposePassion() {
                   <h3 className="text-xl font-semibold text-white mb-2">
                     Driven by Innovation
                   </h3>
-                  <p className="text-slate-400 leading-relaxed text-sm lg:text-base">
+                  <p className="text-white leading-relaxed text-sm lg:text-base">
                     Exploring modern web technologies, AI integration, and performance optimization.
                   </p>
                 </div>
@@ -97,7 +97,7 @@ export default function PurposePassion() {
                   <h3 className="text-xl font-semibold text-white mb-2">
                     User-Centric Design
                   </h3>
-                  <p className="text-slate-400 leading-relaxed text-sm lg:text-base">
+                  <p className="text-white leading-relaxed text-sm lg:text-base">
                     Creating intuitive, seamless, and premium user experiences.
                   </p>
                 </div>
@@ -120,7 +120,7 @@ export default function PurposePassion() {
                   <h3 className="text-xl font-semibold text-white mb-2">
                     Continuous Growth
                   </h3>
-                  <p className="text-slate-400 leading-relaxed text-sm lg:text-base">
+                  <p className="text-white leading-relaxed text-sm lg:text-base">
                     Always learning and improving to build scalable and modern web applications.
                   </p>
                 </div>

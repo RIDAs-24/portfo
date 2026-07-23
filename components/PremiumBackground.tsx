@@ -1,21 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import NetworkCanvas from './NetworkCanvas';
 
 /**
- * PremiumBackground — fixed full-screen ambient background.
- *
- * Performance notes:
- * - All 5 gradient orbs now use CSS @keyframes (defined in globals.css)
- *   instead of Framer Motion — runs entirely on the GPU compositor thread,
- *   zero JS/RAF overhead during scroll.
- * - `will-change: transform` is pre-declared via the `.gpu-layer` class so
- *   the browser promotes each orb to its own composited layer before the
- *   animation starts, eliminating mid-scroll repaint.
- * - blur values reduced slightly (160px → 120px) for lower GPU memory cost
- *   while remaining visually indistinguishable.
+ * PremiumBackground — fixed full-screen background.
+ * Uses y.jpeg centered in the viewport with a professional dark overlay.
  */
 export default function PremiumBackground() {
   const [mounted, setMounted] = useState(false);
@@ -25,84 +14,81 @@ export default function PremiumBackground() {
   }, []);
 
   if (!mounted) return (
-    <div className="fixed inset-0 z-[-1] bg-[#060918]" />
+    <div className="fixed inset-0 z-[-1] bg-[#060a10]" />
   );
-
 
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
 
-      {/* ── Background photo ─────────────────────────────────────── */}
-      <Image
-        src="/back.jpg.avif"
-        alt="Background"
-        fill
-        priority
-        quality={75}
-        className="object-cover object-center"
-      />
-      {/* Dark overlay to preserve the dark neon aesthetic */}
-      <div className="absolute inset-0 bg-[#060918]/55" />
-
-      {/* ── Animated Network Canvas ─────────────────────────────── */}
-      <NetworkCanvas />
-
-      {/* ── Gradient orbs — CSS-animated, GPU-only ───────────────── */}
-
-      {/* Top-right purple glow */}
+      {/* ── Deep dark base ─────────────────────────────────────────── */}
       <div
-        className="gpu-layer absolute top-[-15%] right-[-5%] w-[65%] h-[65%] rounded-full opacity-35 mix-blend-screen"
+        className="absolute inset-0"
+        style={{ background: '#060a10' }}
+      />
+
+      {/* ── Photo — centered, contained, not stretched ─────────────── */}
+      <div
+        className="absolute inset-0 gpu-layer"
         style={{
-          background: 'radial-gradient(circle, rgba(139,92,246,0.7) 0%, rgba(59,7,100,0.3) 50%, rgba(0,0,0,0) 70%)',
-          filter: 'blur(120px)',
-          animation: 'orb-drift-1 22s ease-in-out infinite',
+          backgroundImage: 'url(/y.jpeg)',
+          backgroundSize: 'contain',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
         }}
       />
 
-      {/* Bottom-left blue glow */}
+      {/* ── Soft dark fade on all 4 edges — blends photo into the page */}
+      {/* Top */}
+      <div className="absolute inset-x-0 top-0 h-48"
+        style={{ background: 'linear-gradient(to bottom, #060a10 0%, transparent 100%)' }} />
+      {/* Bottom */}
+      <div className="absolute inset-x-0 bottom-0 h-48"
+        style={{ background: 'linear-gradient(to top, #060a10 0%, transparent 100%)' }} />
+      {/* Left */}
+      <div className="absolute inset-y-0 left-0 w-40"
+        style={{ background: 'linear-gradient(to right, #060a10 0%, transparent 100%)' }} />
+      {/* Right */}
+      <div className="absolute inset-y-0 right-0 w-40"
+        style={{ background: 'linear-gradient(to left, #060a10 0%, transparent 100%)' }} />
+
+      {/* ── Dark overlay — keeps text legible ──────────────────────── */}
       <div
-        className="gpu-layer absolute bottom-[-20%] left-[-10%] w-[70%] h-[70%] rounded-full opacity-30 mix-blend-screen"
+        className="absolute inset-0"
+        style={{ background: 'rgba(6, 10, 16, 0.55)' }}
+      />
+
+      {/* ── Subtle dot grid ────────────────────────────────────────── */}
+      <div
+        className="absolute inset-0"
         style={{
-          background: 'radial-gradient(circle, rgba(59,130,246,0.6) 0%, rgba(30,58,138,0.3) 50%, rgba(0,0,0,0) 70%)',
-          filter: 'blur(120px)',
-          animation: 'orb-drift-2 28s ease-in-out 3s infinite',
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+          opacity: 0.02,
         }}
       />
 
-      {/* Center indigo glow */}
-      <div
-        className="gpu-layer absolute top-[30%] left-[25%] w-[50%] h-[50%] rounded-full opacity-[0.18] mix-blend-screen"
-        style={{
-          background: 'radial-gradient(circle, rgba(99,102,241,0.55) 0%, rgba(0,0,0,0) 70%)',
-          filter: 'blur(110px)',
-          animation: 'orb-drift-3 35s ease-in-out 7s infinite',
-        }}
-      />
+      {/* ── Twinkling Background Stars (Professional Touch) ────────── */}
+      <div className="absolute inset-0 z-0">
+        <div className="star-1 absolute top-[10%] left-[15%] w-1.5 h-1.5 bg-blue-400 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+        <div className="star-2 absolute top-[25%] left-[80%] w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
+        <div className="star-3 absolute top-[40%] left-[5%] w-1 h-1 bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+        <div className="star-float absolute top-[55%] left-[75%] w-1.5 h-1.5 bg-blue-300 rounded-full shadow-[0_0_8px_rgba(147,197,253,0.8)]" />
+        <div className="star-1 absolute top-[70%] left-[20%] w-2 h-2 bg-cyan-300 rounded-full shadow-[0_0_10px_rgba(103,232,249,0.8)]" />
+        <div className="star-2 absolute top-[85%] left-[85%] w-1.5 h-1.5 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+        <div className="star-3 absolute top-[15%] left-[50%] w-1 h-1 bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+        <div className="star-float absolute top-[45%] left-[30%] w-2 h-2 bg-cyan-500 rounded-full shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
+        <div className="star-1 absolute top-[80%] left-[60%] w-1.5 h-1.5 bg-blue-400 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+        <div className="star-2 absolute top-[35%] left-[90%] w-1 h-1 bg-white rounded-full shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+        <div className="star-3 absolute top-[65%] left-[10%] w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+        <div className="star-float absolute top-[95%] left-[40%] w-2 h-2 bg-blue-300 rounded-full shadow-[0_0_10px_rgba(147,197,253,0.8)]" />
+      </div>
 
-      {/* Top-left violet accent */}
+      {/* ── Right-Side White Glow Gradient ─────────────────────────── */}
       <div
-        className="gpu-layer absolute top-[-5%] left-[-5%] w-[40%] h-[40%] rounded-full opacity-20 mix-blend-screen"
+        className="absolute inset-y-0 right-0 w-1/2 md:w-1/3 z-10"
         style={{
-          background: 'radial-gradient(circle, rgba(167,139,250,0.5) 0%, rgba(0,0,0,0) 70%)',
-          filter: 'blur(100px)',
-          animation: 'orb-drift-4 18s ease-in-out 1s infinite',
+          background: 'linear-gradient(to left, rgba(255,252,253,0.30) 0%, rgba(253,245,248,0.12) 50%, transparent 100%)',
         }}
-      />
-
-      {/* Bottom-right deep purple accent */}
-      <div
-        className="gpu-layer absolute bottom-[-10%] right-[-5%] w-[45%] h-[45%] rounded-full opacity-25 mix-blend-screen"
-        style={{
-          background: 'radial-gradient(circle, rgba(168,85,247,0.5) 0%, rgba(0,0,0,0) 70%)',
-          filter: 'blur(110px)',
-          animation: 'orb-drift-5 24s ease-in-out 5s infinite',
-        }}
-      />
-
-      {/* ── Noise texture for depth ──────────────────────────────── */}
-      <div
-        className="absolute inset-0 opacity-[0.018] mix-blend-overlay pointer-events-none"
-        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.75%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E")' }}
       />
     </div>
   );

@@ -5,6 +5,7 @@ import {
   Sparkles,
   Film,
   Leaf,
+  Scissors,
   LucideIcon,
 } from 'lucide-react';
 
@@ -117,6 +118,29 @@ export const PROJECTS: Project[] = [
     status: 'Live',
     link: 'https://movie-discovery-app-lake.vercel.app',
     github: 'https://github.com',
+  },
+  {
+    id: 6,
+    slug: 'youssef-ouhdid-barber-shop',
+    title: 'Youssef Ouhdid Barber Shop',
+    description:
+      'A modern and responsive barber shop website with online booking, gallery, testimonials, and an admin dashboard.',
+    longDescription:
+      'A luxury, production-ready barber shop website built with React, TypeScript, Vite, and Tailwind CSS. Features a cinematic hero section, services showcase, masonry image gallery, customer testimonials, a full online booking system with local storage, and a complete admin dashboard for appointment management — all wrapped in smooth Framer Motion animations and full dark/light theme support.',
+    highlights: [
+      'Online booking system with local storage',
+      'Admin dashboard for appointment management',
+      'Masonry image gallery & testimonials',
+      'Framer Motion animations & dark/light theme',
+    ],
+    tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Context API'],
+    gradient: 'from-amber-500/30 to-yellow-600/30',
+    icon: Scissors,
+    category: 'Frontend / React',
+    year: '2025',
+    status: 'Live',
+    link: 'https://youssef-ouhdid.vercel.app',
+    github: 'https://github.com/RIDAs-24/youssef-ouhdid',
   },
 ];
 

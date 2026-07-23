@@ -11,6 +11,7 @@ interface Project {
   tech: string[];
   gradient: string;
   link?: string;
+  github?: string;
 }
 
 const projectsData: Project[] = [
@@ -34,7 +35,16 @@ const projectsData: Project[] = [
     highlights: ['Responsive design', 'Cinematic animations', 'Glassmorphism'],
     tech: ['React', 'Next.js', 'Framer Motion', 'Tailwind'],
     gradient: 'from-orange-500/20 to-red-500/20'
-  }
+  },
+  {
+    title: 'Youssef Ouhdid Barber Shop',
+    description: 'A modern and responsive barber shop website with a professional landing page, online booking system, image gallery, testimonials, and an admin dashboard.',
+    highlights: ['Online booking system', 'Admin dashboard', 'Smooth animations', 'Dark/Light theme'],
+    tech: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Context API'],
+    gradient: 'from-amber-500/20 to-yellow-600/20',
+    link: 'https://youssef-ouhdid.vercel.app',
+    github: 'https://github.com/RIDAs-24/youssef-ouhdid',
+  },
 ];
 
 interface ProjectCardProps {

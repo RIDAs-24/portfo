@@ -58,7 +58,7 @@ const SkillCard = memo(function SkillCard({ data }: SkillCardProps) {
   
   return (
     <motion.div
-      className={`glass-card p-10 rounded-3xl group relative overflow-hidden transition-all duration-500 border border-white/5 bg-[#0a0a14]/60 backdrop-blur-md cursor-pointer hover:bg-[#10101a]/80 ${data.borderColor} ${data.shadowColor}`}
+      className={`p-10 rounded-3xl group relative overflow-hidden transition-all duration-500 border border-white/5 bg-transparent cursor-pointer ${data.borderColor} ${data.shadowColor}`}
       variants={itemVariants}
       whileHover={{ y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}

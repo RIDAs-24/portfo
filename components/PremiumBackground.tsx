@@ -1,22 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 /**
  * PremiumBackground — fixed full-screen background.
  * Uses y.jpeg centered in the viewport with a professional dark overlay.
+ *
+ * No `mounted` guard needed: this component reads no browser APIs on render,
+ * so SSR and client output are identical — no hydration mismatch possible.
  */
 export default function PremiumBackground() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return (
-    <div className="fixed inset-0 z-[-1] bg-[#060a10]" />
-  );
-
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
 

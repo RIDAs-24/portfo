@@ -6,8 +6,8 @@
  * - All other sections: dynamic() with SSR enabled (preserves SEO, avoids hydration mismatch)
  *   The JS bundle for each is split into a separate chunk and only downloaded when needed.
  *
- * Note: ProjectShowcase uses Recharts + canvas inside — those sub-components handle
- * their own ssr:false via isMounted guards, so the section shell itself can still SSR.
+ * Note: ProjectShowcase components handle their own ssr:false
+ * via isMounted guards, so the section shell itself can still SSR.
  */
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
@@ -19,10 +19,6 @@ import SectionSkeleton from '@/components/SectionSkeleton';
 // SSR enabled (default) for SEO & hydration stability.
 const About = dynamic(() => import('@/components/About'), {
   loading: () => <SectionSkeleton height="h-[700px]" />,
-});
-
-const Skills = dynamic(() => import('@/components/Skills'), {
-  loading: () => <SectionSkeleton height="h-[600px]" />,
 });
 
 const PurposePassion = dynamic(() => import('@/components/PurposePassion'), {
@@ -57,10 +53,6 @@ export default function Home() {
       {/* Below-fold sections — split bundles, wrapped in Suspense */}
       <Suspense fallback={<SectionSkeleton height="h-[700px]" />}>
         <About />
-      </Suspense>
-
-      <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
-        <Skills />
       </Suspense>
 
       <Suspense fallback={<SectionSkeleton height="h-[700px]" />}>

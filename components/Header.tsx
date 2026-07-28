@@ -8,7 +8,6 @@ import { useScrollSpy } from '@/hooks/useScrollSpy';
 const NAV_ITEMS: { label: string; id: string }[] = [
   { label: 'Home',     id: 'home'     },
   { label: 'About',   id: 'about'    },
-  { label: 'Skills',  id: 'skills'   },
   { label: 'Projects',id: 'projects' },
   { label: 'Eco',     id: 'eco'      },
   { label: 'Contact', id: 'contact'  },

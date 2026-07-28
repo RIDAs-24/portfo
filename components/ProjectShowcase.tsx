@@ -15,7 +15,6 @@ import {
 import { containerVariants, scrollRevealVariants } from '@/lib/animations';
 import ProjectCard from './ProjectCard';
 import LivePreviewModal from './LivePreviewModal';
-import SkillsChart from './SkillsChart';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 export interface Project {
@@ -107,14 +106,13 @@ const PROJECTS: Project[] = [
     title: 'Portfolio Website',
     description: 'Award-winning personal portfolio with Framer Motion animations and a Bento Grid layout.',
     longDescription:
-      'The very site you are on — built with Next.js App Router, Tailwind CSS v4, and Framer Motion. It features a cinematic hero, animated skill charts, and a bento-grid project showcase that demonstrates advanced React state management.',
+      'The very site you are on — built with Next.js App Router, Tailwind CSS v4, and Framer Motion. It features a cinematic hero and a bento-grid project showcase that demonstrates advanced React state management.',
     highlights: [
       'Bento-grid Framer Motion layout',
       'AnimatePresence modal system',
       'Custom useMousePosition hook',
-      'Recharts skill analytics panel',
     ],
-    tech: ['Next.js', 'Framer Motion', 'Tailwind CSS', 'Recharts'],
+    tech: ['Next.js', 'Framer Motion', 'Tailwind CSS'],
     gradient: 'from-sky-500/30 to-indigo-500/30',
     icon: Globe,
     category: 'Frontend',
@@ -294,7 +292,6 @@ export default function ProjectShowcase() {
           {/* Analytics sidebar — sticky on large screens */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
-              <SkillsChart />
 
               {/* Live stat card */}
               <motion.div

@@ -148,19 +148,18 @@ export default function NetworkCanvas() {
         const col   = NODE_COLORS[n.colorIndex];
         const pulse = 0.6 + 0.4 * Math.sin(n.pulsePhase);
 
-        // Outer glow (single radial gradient per node — cached by colorIndex is not needed; it's 1 per node not per pair)
-        const glow = ctx!.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.radius * 4);
-        glow.addColorStop(0, `rgba(${col.r},${col.g},${col.b},${(0.28 * pulse).toFixed(3)})`);
-        glow.addColorStop(1, `rgba(${col.r},${col.g},${col.b},0)`);
+        // Outer glow — flat rgba arc instead of createRadialGradient.
+        // createRadialGradient allocates a new gradient object every frame (45 nodes × 60fps = 2700 allocs/sec).
+        // A flat semi-transparent arc is visually near-identical and has zero allocation cost.
         ctx!.beginPath();
         ctx!.arc(n.x, n.y, n.radius * 4, 0, Math.PI * 2);
-        ctx!.fillStyle = glow;
+        ctx!.fillStyle = `rgba(${col.r},${col.g},${col.b},${(0.12 * pulse).toFixed(2)})`;
         ctx!.fill();
 
         // Core dot
         ctx!.beginPath();
         ctx!.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
-        ctx!.fillStyle = `rgba(${col.r},${col.g},${col.b},${(0.85 * pulse).toFixed(3)})`;
+        ctx!.fillStyle = `rgba(${col.r},${col.g},${col.b},${(0.85 * pulse).toFixed(2)})`;
         ctx!.fill();
       }
 

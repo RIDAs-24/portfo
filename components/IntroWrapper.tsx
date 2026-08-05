@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import IntroSequence from './IntroSequence';
 
 export default function IntroWrapper({ children }: { children: React.ReactNode }) {
   const [showIntro, setShowIntro] = useState(true);
@@ -12,12 +11,15 @@ export default function IntroWrapper({ children }: { children: React.ReactNode }
     setIsMounted(true);
     // Force scroll to top when intro starts
     window.scrollTo(0, 0);
-  }, []);
 
-  const handleFinish = () => {
-    setShowIntro(false);
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  };
+    // Hide intro after a short delay (e.g., 2.5 seconds)
+    const timer = setTimeout(() => {
+      setShowIntro(false);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Prevent hydration mismatch by not rendering anything until mounted
   if (!isMounted) return <div className="min-h-screen bg-[#020617]" />;
@@ -27,11 +29,20 @@ export default function IntroWrapper({ children }: { children: React.ReactNode }
       <AnimatePresence>
         {showIntro && (
           <motion.div 
-            className="fixed inset-0 z-[99999] bg-[#020617]"
-            exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.1 }}
-            transition={{ duration: 1.5, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[99999] bg-[#020617] flex items-center justify-center"
+            exit={{ opacity: 0, filter: 'blur(10px)', scale: 1.05 }}
+            transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
           >
-            <IntroSequence onFinish={handleFinish} />
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+              className="flex items-center justify-center"
+            >
+              <h1 className="text-4xl md:text-6xl font-light text-white tracking-[0.3em] uppercase">
+                Welcome
+              </h1>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

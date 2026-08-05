@@ -17,16 +17,17 @@ const scrollToSection = (id: string) => {
 export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen pt-32 pb-20 px-6 flex items-center justify-center overflow-hidden">
-      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-12 items-start relative z-10">
+      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-12 lg:gap-20 items-center relative z-10">
         
         {/* Left Column — Image & Name */}
         {/* Removed filter:blur from initial/animate — blur on large elements forces full repaint.
             Now uses opacity+scale only which the compositor handles without touching layout. */}
         <motion.div
-          className="lg:col-span-5 relative flex flex-col justify-start items-center w-full mt-12 lg:mt-0 order-first pl-16 sm:pl-24 lg:pl-32"
+          className="lg:col-span-5 relative flex flex-col justify-center items-center w-full mt-12 lg:mt-0 lg:-translate-y-16 order-first"
           initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
         >
           <div className="relative w-full max-w-[250px] sm:max-w-[300px] lg:max-w-[350px] aspect-square rounded-full overflow-hidden border border-blue-500/25 shadow-[0_0_40px_rgba(59,130,246,0.25)] group">
             {/* Professional blue overlay */}
@@ -56,7 +57,8 @@ export default function Hero() {
           className="lg:col-span-7 text-left space-y-8"
           variants={containerVariants}
           initial="initial"
-          animate="animate"
+          whileInView="animate"
+          viewport={{ once: true, margin: "-50px" }}
         >
           {/* Glowing Badge */}
           <motion.div className="flex justify-start mb-4" variants={textRevealVariants}>

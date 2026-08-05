@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/app/ThemeProvider";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import PremiumBackground from "@/components/PremiumBackground";
+import CustomCursor from "@/components/CustomCursor";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="dark">
       <body className={cn(inter.className, "bg-background text-foreground transition-colors duration-300 min-h-screen selection:bg-indigo-500/30")}>
+        <CustomCursor />
         <PremiumBackground />
         <div className="fixed inset-0 z-[0] bg-grid opacity-10 pointer-events-none mix-blend-overlay"></div>
         <ThemeProvider>

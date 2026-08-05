@@ -21,8 +21,16 @@ const About = dynamic(() => import('@/components/About'), {
   loading: () => <SectionSkeleton height="h-[700px]" />,
 });
 
+const Skills = dynamic(() => import('@/components/Skills'), {
+  loading: () => <SectionSkeleton height="h-[600px]" />,
+});
+
 const PurposePassion = dynamic(() => import('@/components/PurposePassion'), {
   loading: () => <SectionSkeleton height="h-[700px]" />,
+});
+
+const SectionDivider = dynamic(() => import('@/components/SectionDivider'), {
+  loading: () => <div className="h-32 w-full" />,
 });
 
 const ProjectShowcase = dynamic(() => import('@/components/showcase/ProjectShowcase'), {
@@ -31,6 +39,10 @@ const ProjectShowcase = dynamic(() => import('@/components/showcase/ProjectShowc
 
 const EcoSection = dynamic(() => import('@/components/EcoSection'), {
   loading: () => <SectionSkeleton height="h-[600px]" />,
+});
+
+const Experience = dynamic(() => import('@/components/Experience'), {
+  loading: () => <SectionSkeleton height="h-[800px]" />,
 });
 
 const Goals = dynamic(() => import('@/components/Goals'), {
@@ -43,41 +55,67 @@ const Contact = dynamic(() => import('@/components/Contact'), {
 
 const Footer = dynamic(() => import('@/components/Footer'));
 
+import IntroWrapper from '@/components/IntroWrapper';
+
 export default function Home() {
   return (
-    <main className="flex flex-col">
-      {/* Critical above-the-fold — eager load */}
-      <Header />
-      <Hero />
+    <IntroWrapper>
+      <main className="flex flex-col">
+        {/* Critical above-the-fold — eager load */}
+        <Header />
+        <Hero />
 
-      {/* Below-fold sections — split bundles, wrapped in Suspense */}
-      <Suspense fallback={<SectionSkeleton height="h-[700px]" />}>
-        <About />
-      </Suspense>
+        {/* Below-fold sections — split bundles, wrapped in Suspense */}
+        <Suspense fallback={<SectionSkeleton height="h-[700px]" />}>
+          <About />
+        </Suspense>
 
-      <Suspense fallback={<SectionSkeleton height="h-[700px]" />}>
-        <PurposePassion />
-      </Suspense>
+        <SectionDivider />
 
-      <Suspense fallback={<SectionSkeleton height="h-[800px]" />}>
-        <ProjectShowcase />
-      </Suspense>
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <Skills />
+        </Suspense>
 
-      <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
-        <EcoSection />
-      </Suspense>
+        <SectionDivider />
 
-      <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>
-        <Goals />
-      </Suspense>
+        <Suspense fallback={<SectionSkeleton height="h-[700px]" />}>
+          <PurposePassion />
+        </Suspense>
 
-      <Suspense fallback={<SectionSkeleton height="h-[700px]" />}>
-        <Contact />
-      </Suspense>
+        <SectionDivider />
 
-      <Suspense fallback={<SectionSkeleton height="h-[100px]" />}>
-        <Footer />
-      </Suspense>
-    </main>
+        <Suspense fallback={<SectionSkeleton height="h-[800px]" />}>
+          <ProjectShowcase />
+        </Suspense>
+
+        <SectionDivider />
+
+        <Suspense fallback={<SectionSkeleton height="h-[600px]" />}>
+          <EcoSection />
+        </Suspense>
+        
+        <SectionDivider />
+
+        <Suspense fallback={<SectionSkeleton height="h-[800px]" />}>
+          <Experience />
+        </Suspense>
+
+        <SectionDivider />
+
+        <Suspense fallback={<SectionSkeleton height="h-[400px]" />}>
+          <Goals />
+        </Suspense>
+
+        <SectionDivider />
+
+        <Suspense fallback={<SectionSkeleton height="h-[700px]" />}>
+          <Contact />
+        </Suspense>
+
+        <Suspense fallback={<SectionSkeleton height="h-[100px]" />}>
+          <Footer />
+        </Suspense>
+      </main>
+    </IntroWrapper>
   );
 }

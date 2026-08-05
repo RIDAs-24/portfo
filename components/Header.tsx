@@ -1,38 +1,71 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
 
-// The nav labels → the section IDs they scroll to
-const NAV_ITEMS: { label: string; id: string }[] = [
-  { label: 'Home',     id: 'home'     },
-  { label: 'About',   id: 'about'    },
-  { label: 'Projects',id: 'projects' },
-  { label: 'Eco',     id: 'eco'      },
-  { label: 'Contact', id: 'contact'  },
+const NAV_ITEMS = [
+  { label: 'Home', id: 'home' },
+  { label: 'About', id: 'about' },
+  { label: 'Skills', id: 'skills' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Experience', id: 'experience' },
+  { label: 'Contact', id: 'contact' },
 ];
 
 const SECTION_IDS = NAV_ITEMS.map((item) => item.id);
 
+function MagneticButton({ children, onClick, className }: { children: React.ReactNode, onClick?: () => void, className?: string }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const springConfig = { damping: 15, stiffness: 150, mass: 0.1 };
+  const springX = useSpring(x, springConfig);
+  const springY = useSpring(y, springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+    x.set((e.clientX - centerX) * 0.15);
+    y.set((e.clientY - centerY) * 0.15);
+  };
+  
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.button
+      onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={className}
+      style={{ x: springX, y: springY }}
+      whileTap={{ scale: 0.95 }}
+    >
+      {children}
+    </motion.button>
+  );
+}
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-
-  // Scroll spy — highlights the current in-view section
   const activeId = useScrollSpy(SECTION_IDS);
 
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const handleMouseMove = ({ currentTarget, clientX, clientY }: React.MouseEvent) => {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  };
+
   useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 20);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -47,184 +80,216 @@ export default function Header() {
     element?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 w-full max-w-4xl z-50 px-4 md:px-0">
-      {/* Decorative Stars — CSS-animated, zero JS overhead */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="star-1 absolute -top-4 -left-2 md:-left-8 w-1.5 h-1.5 bg-blue-400 rounded-full shadow-[0_0_10px_rgba(59,130,246,1)]" />
-        <div className="star-2 absolute top-1/2 -right-4 md:-right-8 w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_12px_rgba(6,182,212,1)]" />
-        <div className="star-3 absolute -bottom-5 left-[20%] w-1 h-1 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.9)]" />
-        <div className="star-4 absolute -top-3 right-[30%] w-1.5 h-1.5 bg-blue-300 rounded-full shadow-[0_0_10px_rgba(147,197,253,1)]" />
-        <div className="star-float absolute -bottom-3 right-[15%] w-1 h-1 bg-cyan-300 rounded-full shadow-[0_0_8px_rgba(103,232,249,0.8)]" />
-      </div>
-
-      <motion.nav
-        className={`w-full px-6 py-3 flex justify-between items-center rounded-full transition-all duration-500 border border-white/10 ${
-          isScrolled
-            ? 'bg-[#0F172A]/80 backdrop-blur-xl shadow-[0_0_30px_rgba(59,130,246,0.12)] border-white/15'
-            : 'bg-[#0F172A]/40 backdrop-blur-md shadow-[0_0_20px_rgba(0,0,0,0.5)]'
-        }`}
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {/* Logo */}
-        <motion.button
-          onClick={() => scrollToSection('home')}
-          className="text-2xl font-black bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent tracking-tighter transition-all duration-500"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+    <>
+      <header className="fixed top-0 left-0 right-0 z-50 pt-4 px-4 flex justify-center pointer-events-none">
+        <motion.nav
+          onMouseMove={handleMouseMove}
+          className={`pointer-events-auto relative flex items-center justify-between px-4 md:px-6 py-3 mx-auto rounded-full transition-all duration-700 ease-out group ${
+            isMenuOpen
+              ? 'w-full max-w-5xl bg-transparent border-transparent'
+              : isScrolled
+              ? 'w-full md:w-[85%] max-w-4xl bg-slate-950/60 backdrop-blur-2xl border border-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.4)]'
+              : 'w-full max-w-5xl bg-transparent border-transparent'
+          }`}
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          RS
-        </motion.button>
+          {/* Spotlight Effect */}
+          <motion.div
+            className="pointer-events-none absolute -inset-px rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100 hidden md:block"
+            style={{
+              background: useMotionTemplate`
+                radial-gradient(
+                  250px circle at ${mouseX}px ${mouseY}px,
+                  rgba(59, 130, 246, 0.15),
+                  transparent 80%
+                )
+              `,
+            }}
+          />
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-1 items-center">
-          {NAV_ITEMS.map((item, index) => {
-            const isActive = activeId === item.id;
-            return (
-              <motion.button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`text-sm font-medium capitalize relative px-3 py-2 rounded-lg transition-all duration-300 ${
-                  isActive
-                    ? 'text-white'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-                whileHover={{ y: -1 }}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.05 + index * 0.04 }}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                {item.label}
+          {/* Glass reflection line */}
+          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                {/* Active underline — animates in/out with layout */}
-                <motion.span
-                  className="absolute bottom-0 left-2 right-2 h-[2px] rounded-full"
-                  style={{
-                    background: 'linear-gradient(to right, #3B82F6, #06B6D4)',
-                    boxShadow: isActive ? '0 0 8px rgba(59,130,246,0.7)' : 'none',
-                  }}
-                  initial={false}
-                  animate={{
-                    opacity: isActive ? 1 : 0,
-                    scaleX: isActive ? 1 : 0,
-                  }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                />
+          {/* Logo */}
+          <MagneticButton onClick={() => scrollToSection('home')} className="relative z-20 flex items-center pl-2">
+            <motion.span 
+              className="inline-block text-2xl font-black bg-gradient-to-r from-white via-cyan-100 to-blue-400 bg-clip-text text-transparent bg-[length:200%_auto] tracking-tighter"
+              animate={{ backgroundPosition: ['0% center', '200% center'] }}
+              transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
+            >
+              Rida.
+            </motion.span>
+          </MagneticButton>
 
-                {/* Subtle glow bg when active */}
-                {isActive && (
-                  <motion.span
-                    className="absolute inset-0 rounded-lg -z-10"
-                    style={{
-                      background: 'radial-gradient(ellipse at 50% 100%, rgba(59,130,246,0.15) 0%, transparent 70%)',
-                    }}
-                    layoutId="nav-active-bg"
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                  />
-                )}
-              </motion.button>
-            );
-          })}
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center gap-1.5 relative z-20">
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeId === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full group/link ${
+                    isActive ? 'text-white' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <span className="relative z-10">{item.label}</span>
 
-          {/* Let's Talk Button */}
-          <motion.button
-            onClick={() => scrollToSection('contact')}
-            className="ml-3 px-5 py-2 text-sm font-semibold text-white bg-transparent border border-blue-500/50 rounded-full relative overflow-hidden group hover:border-transparent transition-all"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <span className="relative z-10 flex items-center gap-2 text-blue-200 group-hover:text-white transition-colors duration-300">
-              Let&apos;s Talk
-              <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.9)] animate-pulse" />
-            </span>
-          </motion.button>
-        </div>
+                  {/* Active Indicator Glow */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-active-bg"
+                      className="absolute inset-0 bg-blue-500/10 border border-blue-500/20 rounded-full -z-10"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center">
-          <motion.button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 text-slate-300 relative z-50"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+                  {/* Active Dot */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-active-dot"
+                      className="absolute -bottom-1 inset-x-0 mx-auto w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_8px_#22d3ee]"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+
+                  {/* Hover Underline */}
+                  {!isActive && (
+                    <span className="absolute left-4 right-4 bottom-1.5 h-[1px] scale-x-0 bg-gradient-to-r from-transparent via-slate-300 to-transparent transition-transform duration-300 origin-center group-hover/link:scale-x-100 opacity-50" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Desktop CTA */}
+          <div className="hidden md:block relative z-20 pr-1">
+            <MagneticButton
+              onClick={() => scrollToSection('contact')}
+              className="relative flex items-center justify-center px-6 py-2 overflow-hidden rounded-full font-medium text-sm group/btn shadow-[0_0_20px_rgba(37,99,235,0.0)] hover:shadow-[0_0_20px_rgba(37,99,235,0.2)] transition-shadow duration-500"
+            >
+              <div className="absolute inset-0 bg-[#0F172A] border border-white/10 rounded-full" />
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/80 via-cyan-500/80 to-blue-600/80 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500" />
+              
+              <motion.div 
+                className="absolute top-0 -left-[100%] w-1/2 h-full skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent z-10"
+                animate={{ left: ['-100%', '200%'] }}
+                transition={{ repeat: Infinity, duration: 3, ease: 'linear', repeatDelay: 1 }}
+              />
+              
+              <span className="relative z-20 flex items-center gap-2 text-slate-200 group-hover/btn:text-white transition-colors duration-300">
+                Let's Talk
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_#22d3ee]" />
+              </span>
+            </MagneticButton>
+          </div>
+
+          {/* Mobile Hamburger */}
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            className="md:hidden relative z-50 w-10 h-10 flex flex-col items-center justify-center gap-1.5 p-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
             aria-label="Toggle menu"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-            </svg>
-          </motion.button>
-        </div>
-      </motion.nav>
+            <motion.span 
+              animate={isMenuOpen ? { rotate: 45, y: 7.5 } : { rotate: 0, y: 0 }} 
+              className="w-5 h-[1.5px] bg-white block rounded-full" 
+            />
+            <motion.span 
+              animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }} 
+              className="w-5 h-[1.5px] bg-white block rounded-full" 
+            />
+            <motion.span 
+              animate={isMenuOpen ? { rotate: -45, y: -7.5 } : { rotate: 0, y: 0 }} 
+              className="w-5 h-[1.5px] bg-white block rounded-full" 
+            />
+          </button>
+        </motion.nav>
+      </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Full Screen Menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            className="absolute top-20 left-4 right-4 md:hidden bg-[#0F172A]/97 backdrop-blur-xl border border-blue-500/15 shadow-[0_0_40px_rgba(59,130,246,0.2)] rounded-3xl overflow-hidden z-40"
-            initial={{ opacity: 0, y: -16, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -16, scale: 0.97 }}
-            transition={{ duration: 0.22 }}
+            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            animate={{ opacity: 1, backdropFilter: 'blur(20px)' }}
+            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-40 bg-[#030712]/95 flex flex-col items-center justify-center pointer-events-auto"
           >
-            <div className="flex flex-col p-6 gap-1">
-              {NAV_ITEMS.map((item, index) => {
+            {/* Background glowing orbs */}
+            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/20 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-cyan-600/20 rounded-full blur-[100px] pointer-events-none" />
+
+            <div className="flex flex-col items-center gap-8 w-full px-6 relative z-10">
+              {NAV_ITEMS.map((item, i) => {
                 const isActive = activeId === item.id;
                 return (
-                  <motion.button
+                  <motion.div
                     key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className={`relative text-left text-lg font-medium py-3 px-3 rounded-xl border-b border-white/5 last:border-0 transition-all duration-300 ${
-                      isActive
-                        ? 'text-white bg-blue-500/10'
-                        : 'text-slate-400 hover:text-white hover:bg-white/5'
-                    }`}
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.18, delay: index * 0.04 }}
-                    aria-current={isActive ? 'page' : undefined}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ delay: 0.1 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <span className="flex items-center gap-3">
-                      {/* Active indicator dot */}
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                          isActive
-                            ? 'bg-blue-400 shadow-[0_0_6px_rgba(59,130,246,0.8)]'
-                            : 'bg-slate-600'
-                        }`}
-                      />
+                    <button 
+                      onClick={() => scrollToSection(item.id)}
+                      className={`relative group px-6 py-2 flex items-center justify-center text-3xl font-medium tracking-tight ${
+                        isActive ? 'text-white' : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
                       {item.label}
-                    </span>
-
-                    {/* Active left border accent */}
-                    {isActive && (
-                      <motion.span
-                        className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full bg-gradient-to-b from-blue-400 to-cyan-400"
-                        layoutId="mobile-active-bar"
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                      />
-                    )}
-                  </motion.button>
+                      
+                      {isActive && (
+                        <motion.div 
+                          layoutId="mobile-active-text"
+                          className="absolute -inset-x-4 -inset-y-2 bg-blue-500/10 border border-blue-500/20 rounded-2xl -z-10"
+                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        />
+                      )}
+                    </button>
+                  </motion.div>
                 );
               })}
-
-              <motion.button
-                onClick={() => scrollToSection('contact')}
-                className="mt-4 py-3 text-center font-bold text-white bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all duration-300"
-                whileTap={{ scale: 0.95 }}
+              
+              <motion.div
+                 initial={{ opacity: 0, scale: 0.8 }}
+                 animate={{ opacity: 1, scale: 1 }}
+                 exit={{ opacity: 0, scale: 0.8 }}
+                 transition={{ delay: 0.1 + NAV_ITEMS.length * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                 className="mt-8 w-full max-w-[250px]"
               >
-                Let&apos;s Talk
-              </motion.button>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => scrollToSection('contact')}
+                  className="w-full py-4 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold text-lg relative overflow-hidden group shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:shadow-[0_0_40px_rgba(37,99,235,0.5)] transition-shadow duration-300"
+                >
+                  <motion.div 
+                    className="absolute top-0 -left-[100%] w-1/2 h-full skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent z-10"
+                    animate={{ left: ['-100%', '200%'] }}
+                    transition={{ repeat: Infinity, duration: 3, ease: 'linear', repeatDelay: 0.5 }}
+                  />
+                  <span className="relative z-20">Let's Talk</span>
+                </motion.button>
+              </motion.div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

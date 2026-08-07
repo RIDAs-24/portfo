@@ -33,7 +33,7 @@ export default function ProjectShowcase() {
     <section
       id="projects"
       aria-label="Project Showcase"
-      className="py-28 px-6 relative z-10"
+      className="py-28 px-4 sm:px-6 relative z-10"
     >
       <motion.div
         className="max-w-7xl mx-auto"
@@ -47,7 +47,7 @@ export default function ProjectShowcase() {
           <span className="inline-block text-[11px] font-bold uppercase tracking-[0.3em] text-indigo-400 mb-3">
             Interactive Showcase
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-4">
             Selected{' '}
             <span className="text-gradient">Works</span>
           </h2>

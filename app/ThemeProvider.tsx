@@ -9,6 +9,8 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+import { MotionConfig } from 'framer-motion';
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -42,7 +44,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeContext.Provider value={{ isDark, toggleTheme }}>
-      {children}
+      <MotionConfig reducedMotion="user">
+        {children}
+      </MotionConfig>
     </ThemeContext.Provider>
   );
 }

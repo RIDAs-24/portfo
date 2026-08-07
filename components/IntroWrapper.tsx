@@ -30,7 +30,7 @@ export default function IntroWrapper({ children }: { children: React.ReactNode }
         {showIntro && (
           <motion.div 
             className="fixed inset-0 z-[99999] bg-[#020617] flex items-center justify-center"
-            exit={{ opacity: 0, filter: 'blur(10px)', scale: 1.05 }}
+            exit={{ opacity: 0, scale: 1.05 }}
             transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
           >
             <motion.div

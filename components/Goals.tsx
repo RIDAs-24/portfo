@@ -18,7 +18,7 @@ const goalsData = [
 
 export default function Goals() {
   return (
-    <section id="goals" className="py-20 px-6 relative overflow-hidden z-10 section-optimized">
+    <section id="goals" className="py-20 px-4 sm:px-6 relative overflow-hidden z-10 section-optimized">
 
       <motion.div
         className="max-w-4xl mx-auto relative z-10"
@@ -28,7 +28,7 @@ export default function Goals() {
         variants={containerVariants}
       >
         <motion.h2
-          className="text-4xl font-bold text-center mb-12 gradient-text"
+          className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-12 gradient-text"
           variants={scrollRevealVariants}
         >
           Goals &amp; Vision

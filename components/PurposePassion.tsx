@@ -48,7 +48,7 @@ const iconBg: Record<string, string> = {
 export default function PurposePassion() {
   return (
     <section className="relative py-28 sm:py-36 overflow-hidden">
-      <div className="mx-auto max-w-5xl px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
 
         {/* Heading */}
         <motion.div
@@ -63,7 +63,7 @@ export default function PurposePassion() {
               Purpose &amp; Passion
             </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white leading-tight mb-5">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-white leading-tight mb-4 sm:mb-5">
             Bridging the gap between{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400">
               design and engineering

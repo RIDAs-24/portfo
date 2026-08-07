@@ -21,7 +21,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-32 px-6 relative z-10 overflow-hidden section-optimized">
+    <section id="contact" className="py-32 px-4 sm:px-6 relative z-10 overflow-hidden section-optimized">
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-full max-h-[600px] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -32,8 +32,8 @@ export default function Contact() {
         viewport={{ once: true, amount: 0.2 }}
         variants={containerVariants}
       >
-        <motion.div className="text-center mb-20" variants={scrollRevealVariants}>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+        <motion.div className="text-center mb-16 sm:mb-20" variants={scrollRevealVariants}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 sm:mb-6">
             Let&apos;s <span className="text-gradient">Connect</span>
           </h2>
           <p className="text-lg text-white max-w-2xl mx-auto">
@@ -41,7 +41,7 @@ export default function Contact() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-5 gap-12 lg:gap-8 items-start">
+        <div className="grid lg:grid-cols-5 gap-10 lg:gap-8 items-start">
           {/* Contact Info */}
           <motion.div className="lg:col-span-2 space-y-8" variants={containerVariants}>
             <div className="space-y-6">

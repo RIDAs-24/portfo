@@ -16,8 +16,8 @@ const scrollToSection = (id: string) => {
 
 export default function Hero() {
   return (
-    <section id="home" className="relative min-h-screen pt-32 pb-20 px-6 flex items-center justify-center overflow-hidden">
-      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-12 lg:gap-20 items-center relative z-10">
+    <section id="home" className="relative min-h-screen pt-32 pb-20 px-4 sm:px-6 flex items-center justify-center overflow-hidden">
+      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-8 lg:gap-20 items-center relative z-10">
         
         {/* Left Column — Image & Name */}
         {/* Removed filter:blur from initial/animate — blur on large elements forces full repaint.
@@ -36,7 +36,7 @@ export default function Hero() {
             {/* next/image replaces raw <img> — auto lazy-load, AVIF/WebP, proper size hints */}
             <Image
               src="/a.jpg"
-              alt="Rida Sbai"
+              alt="Rida Sbai Portrait"
               fill
               priority
               sizes="(max-width: 640px) 250px, (max-width: 1024px) 300px, 350px"
@@ -54,7 +54,7 @@ export default function Hero() {
 
         {/* Right Column — Text Content */}
         <motion.div
-          className="lg:col-span-7 text-left space-y-8"
+          className="lg:col-span-7 text-left space-y-6 sm:space-y-8"
           variants={containerVariants}
           initial="initial"
           whileInView="animate"
@@ -62,33 +62,33 @@ export default function Hero() {
         >
           {/* Glowing Badge */}
           <motion.div className="flex justify-start mb-4" variants={textRevealVariants}>
-            <div className="glass-panel px-5 py-2 rounded-full flex items-center gap-3 border border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.2)] bg-[#0F172A]/60 backdrop-blur-md">
+            <div className="glass-panel px-4 sm:px-5 py-2 rounded-full flex items-center gap-2 sm:gap-3 border border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.2)] bg-[#0F172A]/60 backdrop-blur-md">
               <motion.div 
                 className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,1)]"
                 variants={glowVariants}
                 initial="initial"
                 animate="animate"
               />
-              <span className="text-sm font-semibold text-blue-100 tracking-wide uppercase">AI &amp; Full Stack Engineer</span>
+              <span className="text-xs sm:text-sm font-semibold text-blue-100 tracking-wide uppercase">AI &amp; Full Stack Engineer</span>
             </div>
           </motion.div>
 
           {/* Main Title */}
           <div className="overflow-hidden">
             <motion.h1 
-              className="text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-black tracking-tighter leading-tight lg:leading-none"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-black tracking-tighter leading-tight lg:leading-none"
               variants={textRevealVariants}
             >
-              <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 pb-4 drop-shadow-[0_0_20px_rgba(59,130,246,0.4)]">
+              <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 pb-2 sm:pb-4 drop-shadow-[0_0_20px_rgba(59,130,246,0.4)]">
                 Full Stack Developer
               </span>
             </motion.h1>
           </div>
 
           {/* Hero Description */}
-          <div className="overflow-hidden mt-6">
+          <div className="overflow-hidden mt-4 sm:mt-6">
             <motion.p 
-              className="text-lg md:text-xl text-slate-300 max-w-xl leading-relaxed font-light"
+              className="text-base sm:text-lg md:text-xl text-slate-300 max-w-xl leading-relaxed font-light"
               variants={textRevealVariants}
             >
               Architecting intelligent, scalable, and high-performance digital experiences. 
@@ -99,13 +99,14 @@ export default function Hero() {
           {/* CTA Buttons */}
           <motion.div 
             variants={textRevealVariants} 
-            className="flex flex-col sm:flex-row gap-6 justify-start pt-6"
+            className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-start pt-4 sm:pt-6"
           >
             <motion.button
               onClick={() => scrollToSection('projects')}
-              className="group relative px-8 py-4 bg-white text-black rounded-full font-bold text-lg overflow-hidden transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)] w-full sm:w-auto text-center"
+              className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-white text-black rounded-full font-bold text-base sm:text-lg overflow-hidden transition-all shadow-[0_0_40px_rgba(255,255,255,0.3)] w-full sm:w-auto text-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              aria-label="View My Work Projects"
             >
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-100 via-white to-cyan-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <span className="relative flex items-center justify-center gap-2">
@@ -117,9 +118,10 @@ export default function Hero() {
               href="/cv.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group px-8 py-4 rounded-full font-bold text-lg text-white border border-white/20 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/40 transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,0,0,0.3)] w-full sm:w-auto"
+              className="group px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg text-white border border-white/20 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/40 transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,0,0,0.3)] w-full sm:w-auto"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              aria-label="Download My Curriculum Vitae"
             >
               Download CV <Download className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
             </motion.a>
@@ -127,29 +129,29 @@ export default function Hero() {
 
           {/* Social Icons */}
           <motion.div 
-            className="flex justify-start gap-6 pt-8"
+            className="flex justify-center sm:justify-start gap-6 pt-6 sm:pt-8"
             variants={textRevealVariants}
           >
-            <a href="https://github.com/RIDAs-24" target="_blank" rel="noopener noreferrer" className="group relative">
+            <a href="https://github.com/RIDAs-24" target="_blank" rel="noopener noreferrer" className="group relative" aria-label="GitHub Profile">
               <div className="absolute inset-0 bg-blue-500 rounded-full blur opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
               <div className="relative p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors">
-                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current text-slate-300 group-hover:text-white transition-colors">
+                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current text-slate-300 group-hover:text-white transition-colors" aria-hidden="true">
                   <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
               </div>
             </a>
-            <a href="https://linkedin.com/in/" target="_blank" rel="noopener noreferrer" className="group relative">
+            <a href="https://linkedin.com/in/" target="_blank" rel="noopener noreferrer" className="group relative" aria-label="LinkedIn Profile">
               <div className="absolute inset-0 bg-cyan-500 rounded-full blur opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
               <div className="relative p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors">
-                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current text-slate-300 group-hover:text-white transition-colors">
+                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current text-slate-300 group-hover:text-white transition-colors" aria-hidden="true">
                   <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                 </svg>
               </div>
             </a>
-            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="group relative">
+            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="group relative" aria-label="Twitter Profile">
               <div className="absolute inset-0 bg-blue-400 rounded-full blur opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
               <div className="relative p-3 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition-colors">
-                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current text-slate-300 group-hover:text-white transition-colors">
+                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current text-slate-300 group-hover:text-white transition-colors" aria-hidden="true">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.008 3.97H5.059z"/>
                 </svg>
               </div>

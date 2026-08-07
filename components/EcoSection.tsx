@@ -31,7 +31,7 @@ const EcoSection = () => {
   ];
 
   return (
-    <section id="eco" className="py-32 px-6 relative z-10 overflow-hidden">
+    <section id="eco" className="py-32 px-4 sm:px-6 relative z-10 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         
         {/* Header Section */}
@@ -52,7 +52,7 @@ const EcoSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 text-white"
+            className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-6 text-white"
           >
             Sustainability meets <span className="bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">Performance</span>
           </motion.h2>

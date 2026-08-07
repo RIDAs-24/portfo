@@ -27,7 +27,7 @@ const experienceData = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-32 px-6 relative z-10">
+    <section id="experience" className="py-32 px-4 sm:px-6 relative z-10">
       <motion.div
         className="max-w-4xl mx-auto"
         initial="initial"
@@ -35,8 +35,8 @@ export default function Experience() {
         viewport={{ once: true, amount: 0.2 }}
         variants={containerVariants}
       >
-        <motion.div className="text-center mb-20" variants={scrollRevealVariants}>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+        <motion.div className="text-center mb-16 sm:mb-20" variants={scrollRevealVariants}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 sm:mb-6">
             Professional <span className="text-gradient">Journey</span>
           </h2>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto">

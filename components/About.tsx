@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export default function About() {
   return (
-    <section id="about" className="py-32 px-6 relative overflow-hidden z-10 section-optimized">
+    <section id="about" className="py-32 px-4 sm:px-6 relative overflow-hidden z-10 section-optimized">
       <motion.div
         className="max-w-7xl mx-auto relative z-10"
         initial="initial"
@@ -14,10 +14,10 @@ export default function About() {
         viewport={{ once: true, amount: 0.3 }}
         variants={containerVariants}
       >
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Left Side: Large Heading & Photo/Graphic Placeholder */}
-          <motion.div variants={itemVariants} className="space-y-8">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
+          <motion.div variants={itemVariants} className="space-y-6 sm:space-y-8">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
               Designing with <br/>
               <span className="text-gradient">Purpose & Passion</span>
             </h2>
